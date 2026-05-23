@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>情书 - 致宝宝</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=ZCOOL+XiaoWei&display=swap');
+
+        @font-face {
+            font-family: 'Handwriting';
+            src: local('Ma Shan Zheng'), local('ZCOOL XiaoWei'), local('STKaiti'), local('KaiTi'), local('楷体');
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            font-family: 'Ma Shan Zheng', 'ZCOOL XiaoWei', 'STKaiti', 'KaiTi', '楷体', serif;
+            background: linear-gradient(135deg, #fef9f0 0%, #f5e6d3 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                repeating-linear-gradient(0deg, transparent, transparent 35px, rgba(0,0,0,0.02) 35px, rgba(0,0,0,0.02) 36px);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .envelope-container {
+            position: relative;
+            width: 550px;
+            max-width: 85vw;
+            height: 380px;
+            max-height: 45vh;
+            perspective: 1500px;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        .envelope {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #e8d4c4 0%, #d4b5a0 100%);
+            border-radius: 10px;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.2);
+            transform-style: preserve-3d;
+            transition: transform 0.6s ease;
+        }
+
+        .envelope-container:hover .envelope {
+            transform: scale(1.02);
+        }
+
+        .envelope-flap {
+            position: absolute;
+            width: 100%;
+            height: 50%;
+            background: linear-gradient(135deg, #d4b5a0 0%, #c4a085 100%);
+            clip-path: polygon(0 0, 50% 100%, 100% 0);
+            transform-origin: top center;
+            transition: transform 1s ease;
+            z-index: 20;
+        }
+
+        .envelope-container.opened .envelope-flap {
+            transform: rotateX(180deg);
+        }
+
+        /* 古代蜡封印章样式 */
+        .envelope-seal {
+            position: absolute;
+            top: 35%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 110px;
+            height: 110px;
+            max-width: 22vw;
+            max-height: 22vw;
+            background: radial-gradient(circle at 30% 30%, #d4242d 0%, #a8161d 50%, #8b0f14 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 3em;
+            font-weight: bold;
+            box-shadow:
+                0 8px 20px rgba(0,0,0,0.3),
+                inset 0 -3px 8px rgba(0,0,0,0.2),
+                inset 0 3px 8px rgba(255,255,255,0.3);
+            z-index: 25;
+            cursor: pointer;
+            animation: sealPulse 2.5s ease-in-out infinite;
+            border: none;
+        }
+
+        .envelope-seal::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background:
+                radial-gradient(circle at 20% 20%, rgba(255,255,255,0.4) 0%, transparent 20%),
+                radial-gradient(circle at 80% 80%, rgba(0,0,0,0.2) 0%, transparent 20%);
+            pointer-events: none;
+        }
+
+        .envelope-seal::after {
+            content: '';
+            position: absolute;
+            width: 110%;
+            height: 110%;
+            border-radius: 45% 50% 48% 52% / 52% 48% 50% 45%;
+            background: radial-gradient(circle, transparent 45%, rgba(139, 15, 20, 0.6) 46%, transparent 47%);
+            pointer-events: none;
+            animation: waxWobble 8s ease-in-out infinite;
+        }
+
+        @keyframes sealPulse {
+            0%, 100% {
+                box-shadow:
+                    0 8px 20px rgba(0,0,0,0.3),
+                    inset 0 -3px 8px rgba(0,0,0,0.2),
+                    inset 0 3px 8px rgba(255,255,255,0.3);
+                transform: translateX(-50%) scale(1);
+            }
+            50% {
+                box-shadow:
+                    0 12px 30px rgba(0,0,0,0.4),
+                    inset 0 -3px 8px rgba(0,0,0,0.2),
+                    inset 0 3px 8px rgba(255,255,255,0.4);
+                transform: translateX(-50%) scale(1.05);
+            }
+        }
+
+        @keyframes waxWobble {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(1deg); }
+            75% { transform: rotate(-1deg); }
+        }
+
+        .envelope-container:hover .envelope-seal {
+            animation: sealExcited 0.4s ease-in-out infinite;
+        }
+
+        @keyframes sealExcited {
+            0%, 100% {
+                transform: translateX(-50%) scale(1.05) rotate(-2deg);
+            }
+            50% {
+                transform: translateX(-50%) scale(1.1) rotate(2deg);
+            }
+        }
+
+        .envelope-container.opened .envelope-seal {
+            opacity: 0;
+            transform: translateX(-50%) scale(2.5) rotate(180deg);
+            transition: all 1s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        /* 信件：不完全遮盖信封 */
+        .letter {
+            position: absolute;
+            width: 85vw;
+            max-width: 580px;
+            height: 75vh;
+            max-height: 750px;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%) translateY(50px) scale(0.95);
+            background: #faf7f2;
+            border-radius: 3px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+            opacity: 0;
+            z-index: 5;
+            overflow: hidden;
+            transition: all 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .envelope-container.opened .letter {
+            opacity: 1;
+            transform: translate(-50%, -50%) translateY(-120px) scale(1);
+        }
+
+        .letter::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                linear-gradient(to right, rgba(139, 90, 43, 0.1) 15px, transparent 15px, transparent calc(100% - 15px), rgba(139, 90, 43, 0.1) calc(100% - 15px)),
+                linear-gradient(to bottom, rgba(139, 90, 43, 0.1) 15px, transparent 15px, transparent calc(100% - 15px), rgba(139, 90, 43, 0.1) calc(100% - 15px)),
+                repeating-linear-gradient(90deg,
+                    transparent 0,
+                    transparent 17.5px,
+                    rgba(180, 50, 50, 0.25) 17.5px,
+                    rgba(180, 50, 50, 0.25) 18.5px,
+                    transparent 18.5px,
+                    transparent 70px);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .letter::after {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, rgba(139, 90, 43, 0.2), transparent);
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .letter-content {
+            height: 100%;
+            position: relative;
+            z-index: 3;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 50px 25px;
+        }
+
+        .page-content {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 0.8s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .page-content.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* 古代信笺容器：从右到左排列，第一列顶格，其他列空2格 */
+        .letter-columns {
+            height: 90%;
+            width: 100%;
+            display: flex;
+            flex-direction: row-reverse;
+            justify-content: flex-start;
+            align-items: center;
+            gap: 0;
+            padding: 0 10px;
+        }
+
+        .column {
+            flex: 0 0 auto;
+            width: 70px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            padding-top: 40px;
+            position: relative;
+        }
+
+        /* 第一列：顶格书写 */
+        .column.first-col {
+            padding-top: 0;
+        }
+
+        /* 空白列用于间距 */
+        .column.empty {
+            width: 35px;
+            padding-top: 0;
+        }
+
+        /* 其他列：空2格 */
+        .column.other-col {
+            padding-top: 80px;
+        }
+
+        /* 文字在列中居中 */
+        .vertical-text {
+            writing-mode: vertical-rl;
+            text-orientation: upright;
+            font-size: 2.2em;
+            letter-spacing: 0.4em;
+            color: #2c1810;
+            line-height: 1;
+            opacity: 0;
+            transform: translateY(50px);
+            font-weight: 500;
+            text-shadow: 1px 1px 0px rgba(0,0,0,0.03);
+            max-height: 100%;
+            /* 让文字在列中完美居中 */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .page-content.visible .column:nth-child(1) .vertical-text {
+            animation: fadeInUp 1.2s ease forwards;
+            animation-delay: 0.5s;
+        }
+
+        .page-content.visible .column:nth-child(2) .vertical-text {
+            animation: fadeInUp 1.2s ease forwards;
+            animation-delay: 1.2s;
+        }
+
+        .page-content.visible .column:nth-child(3) .vertical-text {
+            animation: fadeInUp 1.2s ease forwards;
+            animation-delay: 1.9s;
+        }
+
+        .page-content.visible .column:nth-child(4) .vertical-text {
+            animation: fadeInUp 1.2s ease forwards;
+            animation-delay: 2.6s;
+        }
+
+        .page-content.visible .column:nth-child(5) .vertical-text {
+            animation: fadeInUp 1.2s ease forwards;
+            animation-delay: 3.3s;
+        }
+
+        /* 底部签名：右下角 */
+        .footer {
+            position: absolute;
+            bottom: 45px;
+            right: 45px;
+            text-align: right;
+            opacity: 0;
+            transition: opacity 1s ease;
+            z-index: 4;
+        }
+
+        .page-content.visible .footer {
+            animation: fadeIn 1s ease forwards;
+            animation-delay: 3.8s;
+        }
+
+        .date {
+            font-size: 1.4em;
+            color: #6a5448;
+            margin-bottom: 12px;
+            letter-spacing: 0.08em;
+        }
+
+        .signature {
+            font-size: 1.6em;
+            color: #4a3428;
+            letter-spacing: 0.15em;
+        }
+
+        /* 印章：左下角 */
+        .seal {
+            position: absolute;
+            bottom: 40px;
+            left: 40px;
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle at 30% 30%, #d4242d 0%, #a8161d 50%, #8b0f14 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 2.4em;
+            font-weight: bold;
+            opacity: 0;
+            transform: rotate(-15deg) scale(0);
+            box-shadow:
+                0 5px 15px rgba(0,0,0,0.3),
+                inset 0 -2px 5px rgba(0,0,0,0.2),
+                inset 0 2px 5px rgba(255,255,255,0.3);
+            z-index: 4;
+        }
+
+        .page-content.visible .seal {
+            animation: sealStamp 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+            animation-delay: 4.2s;
+        }
+
+        @keyframes sealStamp {
+            0% {
+                opacity: 0;
+                transform: rotate(-15deg) scale(0);
+            }
+            60% {
+                opacity: 1;
+                transform: rotate(-15deg) scale(1.2);
+            }
+            100% {
+                opacity: 1;
+                transform: rotate(-15deg) scale(1);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .click-hint {
+            position: absolute;
+            bottom: -60px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1.3em;
+            color: #8b6f8c;
+            animation: pulse 2s ease-in-out infinite;
+            white-space: nowrap;
+            letter-spacing: 0.1em;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+                transform: translateX(-50%) scale(1);
+            }
+            50% {
+                opacity: 0.7;
+                transform: translateX(-50%) scale(1.05);
+            }
+        }
+
+        .envelope-container.opened .click-hint {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .petal {
+            position: fixed;
+            font-size: 20px;
+            pointer-events: none;
+            opacity: 0.6;
+            animation: fall linear forwards;
+            z-index: 9999;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+            }
+        }
+
+        /* H5适配：解决遮挡问题 */
+        @media (max-width: 768px) {
+            .envelope-container {
+                width: 85vw;
+                height: 32vh;
+                min-height: 220px;
+                max-height: 280px;
+            }
+
+            .envelope-seal {
+                width: 85px;
+                height: 85px;
+                font-size: 2.5em;
+            }
+
+            .letter {
+                width: 88vw;
+                height: 72vh;
+                max-height: none;
+            }
+
+            .envelope-container.opened .letter {
+                transform: translate(-50%, -50%) translateY(-100px) scale(1);
+            }
+
+            .letter-columns {
+                gap: 0;
+                padding: 0 5px;
+            }
+
+            .column {
+                width: 56px;
+                padding-top: 25px;
+            }
+
+            .column.first-col {
+                padding-top: 0;
+            }
+
+            .column.empty {
+                width: 28px;
+                padding-top: 0;
+            }
+
+            .column.other-col {
+                padding-top: 50px;
+            }
+
+            .vertical-text {
+                font-size: 1.65em;
+                letter-spacing: 0.3em;
+            }
+
+            .seal {
+                width: 70px;
+                height: 70px;
+                font-size: 1.8em;
+                bottom: 25px;
+                left: 25px;
+            }
+
+            .footer {
+                bottom: 30px;
+                right: 30px;
+            }
+
+            .date {
+                font-size: 1.1em;
+            }
+
+            .signature {
+                font-size: 1.3em;
+            }
+
+            .click-hint {
+                font-size: 1em;
+                bottom: -50px;
+            }
+        }
+
+        /* 超小屏幕优化 */
+        @media (max-width: 400px) {
+            .envelope-container {
+                width: 90vw;
+                height: 28vh;
+                min-height: 200px;
+            }
+
+            .envelope-seal {
+                width: 75px;
+                height: 75px;
+                font-size: 2.2em;
+            }
+
+            .letter {
+                width: 92vw;
+                height: 70vh;
+            }
+
+            .envelope-container.opened .letter {
+                transform: translate(-50%, -50%) translateY(-80px) scale(1);
+            }
+
+            .column {
+                width: 50px;
+                padding-top: 20px;
+            }
+
+            .column.first-col {
+                padding-top: 0;
+            }
+
+            .column.empty {
+                width: 25px;
+            }
+
+            .column.other-col {
+                padding-top: 40px;
+            }
+
+            .vertical-text {
+                font-size: 1.45em;
+                letter-spacing: 0.25em;
+            }
+
+            .seal {
+                width: 60px;
+                height: 60px;
+                font-size: 1.6em;
+                bottom: 20px;
+                left: 20px;
+            }
+
+            .footer {
+                bottom: 25px;
+                right: 25px;
+            }
+
+            .date {
+                font-size: 1em;
+            }
+
+            .signature {
+                font-size: 1.15em;
+            }
+        }
+
+        /* 横屏手机适配 */
+        @media (max-height: 500px) and (orientation: landscape) {
+            .envelope-container {
+                height: 60vh;
+            }
+
+            .letter {
+                height: 85vh;
+            }
+
+            .envelope-container.opened .letter {
+                transform: translate(-50%, -50%) translateY(-60px) scale(1);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="envelope-container" id="envelopeContainer">
+        <!-- 信封 -->
+        <div class="envelope">
+            <div class="envelope-flap"></div>
+            <div class="envelope-seal">启</div>
+        </div>
+
+        <!-- 信件 -->
+        <div class="letter" id="letter">
+            <div class="letter-content">
+                <!-- 信笺内容：第一列顶格，空一列，其他列空2格 -->
+                <div class="page-content" id="pageContent">
+                    <div class="letter-columns">
+                        <!-- 第一列（最右）：问候，顶格书写 -->
+                        <div class="column first-col">
+                            <div class="vertical-text">吾爱炬灵，见信如面</div>
+                        </div>
+
+                        <!-- 空白列：间距 -->
+                        <div class="column empty"></div>
+
+                        <!-- 第二列：空2格 -->
+                        <div class="column other-col">
+                            <div class="vertical-text">山水相隔，心有所念</div>
+                        </div>
+
+                        <!-- 第三列：空2格 -->
+                        <div class="column other-col">
+                            <div class="vertical-text">身若比邻，切要平安</div>
+                        </div>
+
+                        <!-- 第四列：空2格 -->
+                        <div class="column other-col">
+                            <div class="vertical-text">静待相逢，诉说思念</div>
+                        </div>
+                    </div>
+
+                    <div class="footer">
+                        <div class="date">二〇二六年五月二十日</div>
+                        <div class="signature">挚爱呈上</div>
+                    </div>
+
+                    <div class="seal">情</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="click-hint">👆 点击蜡封开启信件</div>
+    </div>
+
+    <script>
+        let isOpened = false;
+
+        const envelopeContainer = document.getElementById('envelopeContainer');
+        const pageContent = document.getElementById('pageContent');
+
+        envelopeContainer.addEventListener('click', () => {
+            if (!isOpened) {
+                envelopeContainer.classList.add('opened');
+                isOpened = true;
+
+                setTimeout(() => {
+                    pageContent.classList.add('visible');
+
+                    for (let i = 0; i < 10; i++) {
+                        setTimeout(createPetal, i * 300);
+                    }
+                    setInterval(createPetal, 2500);
+                }, 800);
+            }
+        });
+
+        function createPetal() {
+            const petal = document.createElement('div');
+            petal.className = 'petal';
+            const petals = ['🌸', '🌺', '🌹', '💐'];
+            petal.innerHTML = petals[Math.floor(Math.random() * petals.length)];
+            petal.style.left = Math.random() * 100 + 'vw';
+            petal.style.top = '-30px';
+            petal.style.fontSize = (Math.random() * 15 + 15) + 'px';
+            petal.style.animationDuration = (Math.random() * 3 + 5) + 's';
+            petal.style.transform = `rotate(${Math.random() * 360}deg)`;
+            document.body.appendChild(petal);
+
+            setTimeout(() => petal.remove(), 8000);
+        }
+
+        envelopeContainer.addEventListener('selectstart', (e) => {
+            e.preventDefault();
+        });
+    </script>
+</body>
+</html>
